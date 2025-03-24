@@ -26,19 +26,16 @@ document.addEventListener("DOMContentLoaded", function() {
         countElem.className = 'count';
         countElem.textContent = card.count;
   
+        // Add animation class if updated
+        if(card.animate) {
+          countElem.classList.add('animate');
+          setTimeout(() => countElem.classList.remove('animate'), 200);
+          card.animate = false;
+        }
+  
         // Create button group container
         const buttonGroup = document.createElement('div');
         buttonGroup.className = 'button-group';
-  
-        // Create plus button
-        const plusButton = document.createElement('button');
-        plusButton.textContent = '+';
-        plusButton.addEventListener('click', function() {
-          if (card.count < 4) {
-            card.count++;
-            renderCards();
-          }
-        });
   
         // Create minus button
         const minusButton = document.createElement('button');
@@ -46,6 +43,18 @@ document.addEventListener("DOMContentLoaded", function() {
         minusButton.addEventListener('click', function() {
           if (card.count > 0) {
             card.count--;
+            card.animate = true;
+            renderCards();
+          }
+        });
+  
+        // Create plus button
+        const plusButton = document.createElement('button');
+        plusButton.textContent = '+';
+        plusButton.addEventListener('click', function() {
+          if (card.count < 4) {
+            card.count++;
+            card.animate = true;
             renderCards();
           }
         });
@@ -69,7 +78,10 @@ document.addEventListener("DOMContentLoaded", function() {
   
     // Reset all counts to zero when reset button is clicked
     resetButton.addEventListener('click', function() {
-      cards.forEach(card => card.count = 0);
+      cards.forEach(card => {
+        card.count = 0;
+        card.animate = true;
+      });
       renderCards();
     });
   });
